@@ -1,23 +1,41 @@
-package com.ethanchris.android.healthpet.views;
+package com.ethanchris.android.healthpet.views
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import android.view.Window
+import android.view.WindowManager
+import com.ethanchris.android.healthpet.R
 
-import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
+class PetScreenActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Hide the title
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        // Hide the title bar
+        supportActionBar!!.hide()
+        // Enable full screen mode
+        this.window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        setContentView(R.layout.activity_pet_screen)
 
-import com.ethanchris.android.healthpet.R;
+        Log.i("ActivityLifecycle", "PetScreenActivity onCreate()")
+    }
 
-public class PetScreenActivity extends AppCompatActivity {
+    override fun onPause() {
+        super.onPause()
+        Log.i("ActivityLifecycle", "PetScreenActivity onPause()")
+    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    override fun onResume() {
+        super.onResume()
+        Log.i("ActivityLifecycle", "PetScreenActivity onResume()")
+    }
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
-        getSupportActionBar().hide(); // hide the title bar
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
-        setContentView(R.layout.activity_pet_screen);
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("ActivityLifecycle", "PetScreenActivity onDestroy()")
     }
 }

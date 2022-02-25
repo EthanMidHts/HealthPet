@@ -6,30 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".views.PetScreenActivity">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="400dp"
-        android:layout_height="797dp"
-        android:layout_marginTop="4dp"
-        android:contentDescription="TODO"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/background"
-        tools:ignore="ImageContrastCheck" />
-
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/Petgif"
-        android:layout_width="438dp"
-        android:layout_height="726dp"
-        android:layout_marginTop="228dp"
-        android:src="@drawable/purpleguyidel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ImageContrastCheck" />
-
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pet_screen_fragment_fullscreen"
+        android:name="com.ethanchris.android.healthpet.views.PetScreenFragment"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
