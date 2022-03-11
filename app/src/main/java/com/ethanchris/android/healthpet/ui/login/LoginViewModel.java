@@ -12,14 +12,18 @@ import com.ethanchris.android.healthpet.data.Result;
 import com.ethanchris.android.healthpet.data.model.LoggedInUser;
 import com.ethanchris.android.healthpet.R;
 import com.ethanchris.android.healthpet.views.PetScreenActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 
 public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
+    private FirebaseAuth mAuth;
 
-    LoginViewModel(LoginRepository loginRepository) {
+    LoginViewModel(LoginRepository loginRepository, FirebaseAuth mAuth) {
+        this.mAuth = mAuth;
         this.loginRepository = loginRepository;
     }
 
@@ -33,14 +37,14 @@ public class LoginViewModel extends ViewModel {
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
-
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-
+        if(mAuth.getCurrentUser().getEmail() == username){
+            try {
+                mAuth.signInWithEmailAndPassword(username, password);
+            } catch (Exception FirebaseAuthInvalidCredentialsException) {
+                loginResult.setValue(new LoginResult(R.string.login_failed));
+            }
         } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
+            mAuth.createUserWithEmailAndPassword(username, password);
         }
     }
 
@@ -70,4 +74,5 @@ public class LoginViewModel extends ViewModel {
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
     }
+
 }
