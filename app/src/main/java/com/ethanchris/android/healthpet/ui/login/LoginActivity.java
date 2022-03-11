@@ -24,20 +24,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ethanchris.android.healthpet.R;
-import com.ethanchris.android.healthpet.ui.login.LoginViewModel;
-import com.ethanchris.android.healthpet.ui.login.LoginViewModelFactory;
 import com.ethanchris.android.healthpet.databinding.ActivityLogin2Binding;
 import com.ethanchris.android.healthpet.views.PetScreenActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLogin2Binding binding;
-
+    private FirebaseAuth mAuth;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mAuth = FirebaseAuth.getInstance();
         binding = ActivityLogin2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
+                    updateUiWithUser(mAuth.getCurrentUser());
                 }
                 setResult(Activity.RESULT_OK);
 
@@ -126,8 +126,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void updateUiWithUser(LoggedInUserView model) {
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        Intent petIntent = new Intent(this, PetScreenActivity.class);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUiWithUser(currentUser);
+        startActivity(petIntent);
+    }
+    private void updateUiWithUser(FirebaseUser model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();

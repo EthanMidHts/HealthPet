@@ -3,9 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Chris/AndroidStudioProjects/HealthPet/app/src/main/res/layout/activity_pet_screen.xml" value="0.32472826086956524" />
-        <entry key="..\:/Users/Chris/AndroidStudioProjects/HealthPet/app/src/main/res/layout/content_home_screen.xml" value="0.4114583333333333" />
-        <entry key="..\:/Users/Chris/AndroidStudioProjects/HealthPet/app/src/main/res/layout/pet_screen_fragment_fullscreen.xml" value="0.33" />
+        <entry key="..\:/Users/Ethan/Documents/HealthPet/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.5475" />
+        <entry key="..\:/Users/Ethan/Documents/HealthPet/app/src/main/res/drawable/ic_launcher_background.xml" value="0.156" />
+        <entry key="..\:/Users/Ethan/Documents/HealthPet/app/src/main/res/layout-w1240dp/activity_login2.xml" value="0.163671875" />
+        <entry key="..\:/Users/Ethan/Documents/HealthPet/app/src/main/res/layout-w936dp/activity_login2.xml" value="0.2667953667953668" />
+        <entry key="..\:/Users/Ethan/Documents/HealthPet/app/src/main/res/layout/activity_home_screen.xml" value="0.2695035460992908" />
+        <entry key="..\:/Users/Ethan/Documents/HealthPet/app/src/main/res/layout/activity_login2.xml" value="0.35435897435897434" />
+        <entry key="..\:/Users/Ethan/Documents/HealthPet/app/src/main/res/layout/activity_main.xml" value="0.2064814814814815" />
+        <entry key="..\:/Users/Ethan/Documents/HealthPet/app/src/main/res/layout/activity_pet_screen.xml" value="0.31354166666666666" />
       </map>
     </option>
   </component>
