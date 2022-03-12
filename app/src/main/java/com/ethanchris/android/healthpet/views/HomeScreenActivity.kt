@@ -8,14 +8,15 @@ import com.ethanchris.android.healthpet.R
 import com.ethanchris.android.healthpet.ui.login.LoginActivity
 
 class HomeScreenActivity : AppCompatActivity() {
-    private var loginButton: Button? = null
-    private var createButton: Button? = null
+    private var mLoginButton: Button? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
+
         val loginIntent = Intent(this, LoginActivity::class.java)
-        loginButton = findViewById(R.id.login)
-        loginButton?.setOnClickListener {
+        mLoginButton = findViewById(R.id.login)
+        mLoginButton?.setOnClickListener {
             startActivity(loginIntent)
         }
     }

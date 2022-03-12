@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "338171421973",
+    "project_id": "healthpet-3bc46",
+    "storage_bucket": "healthpet-3bc46.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338171421973:android:a211f7cf9cf66a3e7cb51c",
+        "android_client_info": {
+          "package_name": "com.ethanchris.android.healthpet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "338171421973-cljtpn6s1diih4urf1tukvhd5384dc56.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxSYRS5x-B0IiwHqQCJr12LVq4TEbp6o4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "338171421973-cljtpn6s1diih4urf1tukvhd5384dc56.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
