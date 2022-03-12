@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         final ProgressBar loadingProgressBar = binding.loading;
 
         Intent petIntent = new Intent(this, PetScreenActivity.class);
+        petIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -130,13 +131,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         Intent petIntent = new Intent(this, PetScreenActivity.class);
+        petIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         if (loginViewModel.isLoggedIn()) {
-//            updateUiWithUser(currentUser);
-            startActivity(petIntent);
+            updateUiWithUser(loginViewModel.getCurrentUser(), petIntent);
         }
     }
     private void updateUiWithUser(FirebaseUser model, Intent petIntent) {
-        String welcome = getString(R.string.welcome) + model.getEmail();
+        String welcome = getString(R.string.welcome) + " " + model.getEmail();
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
         startActivity(petIntent);

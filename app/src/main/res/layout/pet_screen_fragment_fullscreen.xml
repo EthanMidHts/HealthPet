@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background"
+    android:fitsSystemWindows="true"
     android:theme="@style/ThemeOverlay.HealthPet.FullscreenContainer"
     tools:context=".views.PetScreenFragment">
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/Petgif"
-        android:layout_width="438dp"
-        android:layout_height="726dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="228dp"
+        android:adjustViewBounds="true"
+        android:cropToPadding="false"
         android:src="@drawable/purpleguyidel"
+        android:translationY="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ImageContrastCheck" />
+
+    <Button
+        android:id="@+id/open_settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:insetLeft="6dp"
+        android:text="Settings" />
 
 </FrameLayout>

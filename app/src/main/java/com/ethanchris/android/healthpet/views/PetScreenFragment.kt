@@ -1,5 +1,6 @@
 package com.ethanchris.android.healthpet.views
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.WindowManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.ethanchris.android.healthpet.R
 import com.ethanchris.android.healthpet.databinding.PetScreenFragmentFullscreenBinding
 
 /**
@@ -78,6 +80,12 @@ class PetScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val openSettingsButton = view.findViewById<Button>(R.id.open_settings_button)
+        openSettingsButton.setOnClickListener {
+            val intent = Intent(this.context, SettingsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
