@@ -11,10 +11,11 @@
         <entry key="..\:/Users/Chris/AndroidStudioProjects/HealthPet/app/src/main/res/layout/pet_screen_fragment_fullscreen.xml" value="0.33" />
         <entry key="..\:/Users/Chris/AndroidStudioProjects/HealthPet/app/src/main/res/layout/settings_activity.xml" value="0.4114583333333333" />
         <entry key="..\:/Users/Chris/AndroidStudioProjects/HealthPet/app/src/main/res/xml/root_preferences.xml" value="0.4114583333333333" />
+        <entry key="app/src/main/res/layout/activity_settings.xml" value="0.19610507246376813" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -2,6 +2,7 @@ package com.ethanchris.android.healthpet.viewmodels;
 
 import android.util.Log;
 import android.util.Patterns;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
@@ -9,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.ethanchris.android.healthpet.R;
 import com.ethanchris.android.healthpet.ui.login.LoginFormState;
@@ -17,21 +19,26 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class AuthViewModel extends ViewModel {
     private final MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<Task<AuthResult>> authResultTask = new MutableLiveData<>();
+    private MutableLiveData<Boolean> profileUpdateSuccessful = new MutableLiveData<>();
 
     private FirebaseAuth mAuth;
-
-    AuthViewModel(FirebaseAuth mAuth) {
-        this.mAuth = mAuth;
-    }
+    private UserViewModel mUserViewModel;
 
     public LiveData<LoginFormState> getLoginFormState() {
         return loginFormState;
     }
     public LiveData<Task<AuthResult>> getAuthResultTask() { return authResultTask; }
+    public LiveData<Boolean> getProfileUpdateSuccessful() { return profileUpdateSuccessful; }
+
+    public AuthViewModel(FirebaseAuth instance, UserViewModel mUserViewModel) {
+        this.mAuth = instance;
+        this.mUserViewModel = mUserViewModel;
+    }
 
     public void login(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
@@ -49,6 +56,12 @@ public class AuthViewModel extends ViewModel {
                 });
     }
 
+    public void logout() {
+        if (isLoggedIn()) {
+            mAuth.signOut();
+        }
+    }
+
     public void register(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -57,11 +70,31 @@ public class AuthViewModel extends ViewModel {
                         authResultTask.setValue(task);
                         if (task.isSuccessful()) {
                             Log.d("HealthPet", "createUserWithEmailAndPassword:success");
+                            mUserViewModel.createFromFirebaseUser(task.getResult().getUser());
                         } else {
                             Log.w("HealthPet", "createUserWithEmailAndPassword:failure", task.getException());
                         }
                     }
                 });
+    }
+
+    public void updateDisplayName(String displayName) {
+        UserProfileChangeRequest req = new UserProfileChangeRequest.Builder()
+                .setDisplayName(displayName)
+                .build();
+        if (isLoggedIn()) {
+            mAuth.getCurrentUser().updateProfile(req).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (!task.isSuccessful()) {
+                        Log.w("HealthPet", "updateProfile:failure", task.getException());
+                    }
+                    profileUpdateSuccessful.setValue(task.isSuccessful());
+                }
+            });
+        } else {
+            Log.w("HealthPet", "updateProfile:failure user is not logged in");
+        }
     }
 
     public Boolean isLoggedIn() {

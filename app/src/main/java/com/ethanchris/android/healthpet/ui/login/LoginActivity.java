@@ -29,15 +29,17 @@ import com.ethanchris.android.healthpet.R;
 import com.ethanchris.android.healthpet.databinding.ActivityLogin2Binding;
 import com.ethanchris.android.healthpet.viewmodels.AuthViewModel;
 import com.ethanchris.android.healthpet.viewmodels.AuthViewModelFactory;
+import com.ethanchris.android.healthpet.viewmodels.UserViewModel;
+import com.ethanchris.android.healthpet.viewmodels.UserViewModelFactory;
 import com.ethanchris.android.healthpet.views.PetScreenActivity;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private AuthViewModel loginViewModel;
+    private AuthViewModel mAuthViewModel;
+    private UserViewModel mUserViewModel;
     private ActivityLogin2Binding binding;
 
     @Override
@@ -46,8 +48,10 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLogin2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        loginViewModel = new ViewModelProvider(this, new AuthViewModelFactory())
-                .get(AuthViewModel.class);
+        mUserViewModel = new ViewModelProvider(this, new UserViewModelFactory())
+                .get(UserViewModel.class);
+        mAuthViewModel = new ViewModelProvider(this, new AuthViewModelFactory(mUserViewModel))
+                .get(AuthViewModel .class);
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
@@ -57,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent petIntent = new Intent(this, PetScreenActivity.class);
         petIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
+        mAuthViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
                 if (loginFormState == null) {
@@ -86,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
+                mAuthViewModel.loginDataChanged(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
         };
@@ -97,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
+                    mAuthViewModel.login(usernameEditText.getText().toString(),
                             passwordEditText.getText().toString());
                 }
                 return false;
@@ -108,17 +112,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
+                mAuthViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
         });
 
-        loginViewModel.getAuthResultTask().observe(this, new Observer<Task<AuthResult>>() {
+        mAuthViewModel.getAuthResultTask().observe(this, new Observer<Task<AuthResult>>() {
             @Override
             public void onChanged(Task<AuthResult> authResultTask) {
                 loadingProgressBar.setVisibility(View.INVISIBLE);
                 if (authResultTask.isSuccessful()) {
-                    updateUiWithUser(loginViewModel.getCurrentUser(), petIntent);
+                    updateUiWithUser(mAuthViewModel.getCurrentUser(), petIntent);
                 } else {
                     Log.w("HealthPet", "LOGIN FAILED");
                     showLoginFailed(R.string.login_failed);
@@ -132,14 +136,16 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         Intent petIntent = new Intent(this, PetScreenActivity.class);
         petIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if (loginViewModel.isLoggedIn()) {
-            updateUiWithUser(loginViewModel.getCurrentUser(), petIntent);
+        if (mAuthViewModel.isLoggedIn()) {
+            updateUiWithUser(mAuthViewModel.getCurrentUser(), petIntent);
         }
     }
     private void updateUiWithUser(FirebaseUser model, Intent petIntent) {
-        String welcome = getString(R.string.welcome) + " " + model.getEmail();
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+        String displayName = "";
+        if (model.getDisplayName() != null) {
+            displayName = " " + model.getDisplayName();
+        }
+        Toast.makeText(getApplicationContext(), "Welcome" + displayName + "!", Toast.LENGTH_LONG).show();
         startActivity(petIntent);
     }
 
