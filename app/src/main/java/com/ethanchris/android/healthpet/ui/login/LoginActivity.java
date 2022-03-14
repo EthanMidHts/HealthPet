@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         final ProgressBar loadingProgressBar = binding.loading;
 
         Intent petIntent = new Intent(this, PetScreenActivity.class);
-        petIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        petIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         mAuthViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         Intent petIntent = new Intent(this, PetScreenActivity.class);
-        petIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        petIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         if (mAuthViewModel.isLoggedIn()) {
             updateUiWithUser(mAuthViewModel.getCurrentUser(), petIntent);
         }

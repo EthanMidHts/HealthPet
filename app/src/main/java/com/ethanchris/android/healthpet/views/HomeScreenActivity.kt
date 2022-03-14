@@ -17,6 +17,7 @@ class HomeScreenActivity : AppCompatActivity() {
         val loginIntent = Intent(this, LoginActivity::class.java)
         mLoginButton = findViewById(R.id.login)
         mLoginButton?.setOnClickListener {
+            finish();
             startActivity(loginIntent)
         }
     }
