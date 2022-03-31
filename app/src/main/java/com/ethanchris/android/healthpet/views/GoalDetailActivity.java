@@ -78,6 +78,7 @@ public class GoalDetailActivity extends AppCompatActivity {
                     mUserViewModel.getUserSaved().observe(GoalDetailActivity.this, new Observer<Boolean>() {
                         @Override
                         public void onChanged(Boolean success) {
+                            mUserViewModel.getUserSaved().removeObservers(GoalDetailActivity.this);
                             if (success) Toast.makeText(GoalDetailActivity.this, "Cleared goal successfully!", Toast.LENGTH_SHORT).show();
                             else Toast.makeText(GoalDetailActivity.this, "Failed to clear goal", Toast.LENGTH_SHORT).show();
                         }
@@ -156,6 +157,7 @@ public class GoalDetailActivity extends AppCompatActivity {
                             mUserViewModel.getUserSaved().observe(GoalDetailActivity.this, new Observer<Boolean>() {
                                 @Override
                                 public void onChanged(Boolean success) {
+                                    mUserViewModel.getUserSaved().removeObservers(GoalDetailActivity.this);
                                     if (success) Toast.makeText(GoalDetailActivity.this, "Set goal successfully!", Toast.LENGTH_SHORT).show();
                                     else Toast.makeText(GoalDetailActivity.this, "Failed to set goal", Toast.LENGTH_SHORT).show();
                                     dialog.cancel();
