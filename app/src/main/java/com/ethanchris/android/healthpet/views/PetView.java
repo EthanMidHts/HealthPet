@@ -11,8 +11,11 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.ethanchris.android.healthpet.R;
+import com.ethanchris.android.healthpet.models.PetColor;
+import com.ethanchris.android.healthpet.models.PetHat;
 
 import java.io.InputStream;
 
@@ -26,12 +29,14 @@ public class PetView extends View {
         DisplayMetrics mMetrics = new DisplayMetrics();
         if (attrs != null) {
             TypedArray mAttrs = context.getTheme().obtainStyledAttributes(attrs, R.styleable.PetView, 0, 0);
-            InputStream stream = context.getResources().openRawResource(+ mAttrs.getResourceId(R.styleable.PetView_state, R.drawable.pet_idle));
-            if (stream != null) {
-                mMovie = Movie.decodeStream(stream);
+            if (R.styleable.PetView_state != 0) {
+                InputStream stream = context.getResources().openRawResource(+ mAttrs.getResourceId(R.styleable.PetView_state, R.drawable.purple_no_hat));
+                if (stream != null) {
+                    mMovie = Movie.decodeStream(stream);
+                }
             }
         } else {
-            InputStream stream = context.getResources().openRawResource(+ R.drawable.pet_idle);
+            InputStream stream = context.getResources().openRawResource(+ R.drawable.purple_no_hat);
             mMovie = Movie.decodeStream(stream);
         }
         final WindowManager w = (WindowManager) context
@@ -50,6 +55,7 @@ public class PetView extends View {
             super.onDraw(canvas);
             long now = android.os.SystemClock.uptimeMillis();
             if (movieStart == 0) { movieStart = now; }
+
             int gifTime;
             if (mMovie == null) {
                 gifTime = 0;
@@ -66,7 +72,7 @@ public class PetView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d("HealthPet", "pet touched");
+        Toast.makeText(getContext(), "Hello, nice to see you!", Toast.LENGTH_SHORT).show();
         return true;
     }
 
@@ -77,8 +83,8 @@ public class PetView extends View {
             desiredWidth = mMovie.width();
             desiredHeight = mMovie.height();
         } else {
-            desiredWidth = 768;
-            desiredHeight = 768;
+            desiredWidth = 1024;
+            desiredHeight = 1024;
         }
 
         Log.d("HealthPet", "width: " + desiredWidth + ", height: " + desiredHeight);
@@ -105,14 +111,18 @@ public class PetView extends View {
         } else {
             height = desiredHeight;
         }
-        Log.d("HealthPet", "actualWidth: " + width + ", actualHeight: " + height);
 
         setMeasuredDimension(width, height);
     }
 
-    public void setGif(Context context, int id) {
-        InputStream stream = context.getResources().openRawResource(+ id);
+    private int getPetAppearanceId(PetColor color, PetHat hat) {
+        return getResources().getIdentifier(color.name().toLowerCase() + "_" + hat.name().toLowerCase(), "drawable", "com.ethanchris.android.healthpet");
+    }
+
+    public void setGif(Context context, PetColor color, PetHat hat) {
+        InputStream stream = context.getResources().openRawResource(+ getPetAppearanceId(color, hat));
         mMovie = Movie.decodeStream(stream);
         movieStart = 0;
+        this.invalidate();
     }
 }

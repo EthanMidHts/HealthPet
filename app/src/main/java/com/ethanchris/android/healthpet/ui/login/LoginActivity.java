@@ -26,7 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ethanchris.android.healthpet.R;
-import com.ethanchris.android.healthpet.databinding.ActivityLogin2Binding;
+import com.ethanchris.android.healthpet.databinding.ActivityLoginBinding;
+import com.ethanchris.android.healthpet.models.User;
 import com.ethanchris.android.healthpet.viewmodels.AuthViewModel;
 import com.ethanchris.android.healthpet.viewmodels.AuthViewModelFactory;
 import com.ethanchris.android.healthpet.viewmodels.UserViewModel;
@@ -40,12 +41,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private AuthViewModel mAuthViewModel;
     private UserViewModel mUserViewModel;
-    private ActivityLogin2Binding binding;
+    private ActivityLoginBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityLogin2Binding.inflate(getLayoutInflater());
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         mUserViewModel = new ViewModelProvider(this, new UserViewModelFactory())
@@ -137,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent petIntent = new Intent(this, PetScreenActivity.class);
         petIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         if (mAuthViewModel.isLoggedIn()) {
+            mUserViewModel.getFromFirebaseUser(mAuthViewModel.getCurrentUser());
             updateUiWithUser(mAuthViewModel.getCurrentUser(), petIntent);
         }
     }

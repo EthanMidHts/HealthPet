@@ -17,9 +17,16 @@
             android:name=".ui.login.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
+        <activity
+            android:name=".ui.login.RegisterActivity"
+            android:exported="false"
+            android:label="Register" />
         <activity android:name=".views.SettingsActivity"
             android:exported="false"
             android:label="Settings" />
+        <activity android:name=".views.GoalDetailActivity"
+            android:exported="false"
+            android:label="Goals" />
         <activity
             android:name=".views.HomeScreenActivity"
             android:exported="true">

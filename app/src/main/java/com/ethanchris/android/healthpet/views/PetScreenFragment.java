@@ -20,10 +20,18 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.ethanchris.android.healthpet.R;
+import com.ethanchris.android.healthpet.models.PetColor;
+import com.ethanchris.android.healthpet.models.PetHat;
+import com.ethanchris.android.healthpet.models.User;
 import com.ethanchris.android.healthpet.viewmodels.AuthViewModel;
 import com.ethanchris.android.healthpet.viewmodels.AuthViewModelFactory;
+import com.ethanchris.android.healthpet.viewmodels.UserViewModel;
+import com.ethanchris.android.healthpet.viewmodels.UserViewModelFactory;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.fitness.Fitness;
@@ -40,6 +48,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,20 +56,43 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public class PetScreenFragment extends Fragment {
-    private Button mSettingsButton;
+    private Button mSettingsButton, mGoalsButton;
     private GoogleSignInAccount mAccount;
+    private PetView mPetView;
+    private UserViewModel mUserViewModel;
+    private PetColor mPetColor;
+    private PetHat mPetHat;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.pet_screen_fragment_fullscreen, container, false);
 
+        mUserViewModel = new ViewModelProvider(this, new UserViewModelFactory())
+                .get(UserViewModel.class);
+        mUserViewModel.getFromFirebaseUser(FirebaseAuth.getInstance().getCurrentUser());
+        mUserViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                mPetColor = user.getPetColor();
+                mPetHat = user.getPetHat();
+                mPetView = view.findViewById(R.id.petView);
+                mPetView.setGif(getContext(), mPetColor, mPetHat);
+            }
+        });
+
         mSettingsButton = view.findViewById(R.id.open_settings_button);
         mSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View buttonView) {
                 openSettingsActivity(view.getContext());
+                mPetView = view.findViewById(R.id.petView);
             }
+        });
+        mGoalsButton = view.findViewById(R.id.open_goals_button);
+        mGoalsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View buttonView) { openGoalsActivity(view.getContext()); }
         });
 
         // Get activity recognition permission
@@ -172,6 +204,11 @@ public class PetScreenFragment extends Fragment {
 
     private void openSettingsActivity(Context context) {
         Intent intent = new Intent(context, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void openGoalsActivity(Context context) {
+        Intent intent = new Intent(context, GoalDetailActivity.class);
         startActivity(intent);
     }
 }

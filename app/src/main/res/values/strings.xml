@@ -17,7 +17,8 @@
     <string name="title_activity_login">Login</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_register">Register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
@@ -26,6 +27,9 @@
     <string name="save_settings_button">Save Settings</string>
     <string name="profile_update_successful">Profile update successful!</string>
     <string name="profile_update_failure">Profile update failed</string>
+
+    <string name="create_button">Create</string>
+    <string name="cancel_button">Cancel</string>
 
     <!-- Preference Titles -->
     <string name="profile_header">Profile</string>

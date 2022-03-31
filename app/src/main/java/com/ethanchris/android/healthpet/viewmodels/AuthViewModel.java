@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.ethanchris.android.healthpet.R;
+import com.ethanchris.android.healthpet.models.PetColor;
 import com.ethanchris.android.healthpet.ui.login.LoginFormState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,38 +42,47 @@ public class AuthViewModel extends ViewModel {
     }
 
     public void login(String email, String password) {
+        Log.d("HealthPet", "login called");
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("HealthPet", "signInWithEmailAndPassword:success");
-                            authResultTask.setValue(task);
-                        } else {
-                            Log.w("HealthPet", "signInWithEmailAndPassword:failure", task.getException());
-                            register(email, password);
-                        }
-                    }
-                });
+        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                authResultTask.setValue(task);
+                if (task.isSuccessful()) {
+                    Log.d("HealthPet", "signInWithEmailAndPassword:success");
+                } else {
+                    Log.w("HealthPet", "signInWithEmailAndPassword:failure", task.getException());
+                }
+            }
+        });
     }
 
     public void logout() {
         if (isLoggedIn()) {
+            mUserViewModel.clearSingletonUser();
             mAuth.signOut();
         }
     }
 
-    public void register(String email, String password) {
+    public void register(String email, String password, String petName, PetColor petColor) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        authResultTask.setValue(task);
                         if (task.isSuccessful()) {
                             Log.d("HealthPet", "createUserWithEmailAndPassword:success");
-                            mUserViewModel.createFromFirebaseUser(task.getResult().getUser());
+                            mUserViewModel.getUserInitialized().observeForever(new Observer<Boolean>() {
+                                @Override
+                                public void onChanged(Boolean success) {
+                                    if(success) {
+                                        authResultTask.setValue(task);
+                                    }
+                                }
+                            });
+                            mUserViewModel.initializeUser(task.getResult().getUser(), petName, petColor);
                         } else {
                             Log.w("HealthPet", "createUserWithEmailAndPassword:failure", task.getException());
+                            authResultTask.setValue(task);
                         }
                     }
                 });
