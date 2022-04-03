@@ -118,6 +118,8 @@ public class PetScreenFragment extends Fragment {
             Log.d("HealthPet", "Got Google Fit permission result code " + resultCode);
             if (resultCode == Activity.RESULT_OK) {
 
+            } else {
+                Log.d("HealthPet", data.getExtras().toString());
             }
         }
     }

@@ -15,8 +15,11 @@ class PetScreenActivity : AppCompatActivity() {
 
         val fm = supportFragmentManager;
         var fragment = fm.findFragmentById(R.id.pet_screen_fragment_container)
-        if (fragment == null) fragment = PetScreenFragment()
-        fm.beginTransaction().add(R.id.pet_screen_fragment_container, fragment).commit()
+        // Make sure fragment isn't already created
+        if (fragment == null) {
+            fragment = PetScreenFragment()
+            fm.beginTransaction().add(R.id.pet_screen_fragment_container, fragment).commit()
+        }
 
         Log.i("ActivityLifecycle", "PetScreenActivity onCreate()")
     }
