@@ -6,6 +6,7 @@ import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -97,7 +98,7 @@ public class PetScreenFragment extends Fragment {
         public void onActivityResult(Boolean accepted) {
             if (!accepted) {
                 Toast.makeText(getContext(), "Permission needed :(", Toast.LENGTH_LONG).show();
-                // Go back to home screen
+//                 Go back to home screen
                 Intent intent = new Intent(getContext(), HomeScreenActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -109,7 +110,11 @@ public class PetScreenFragment extends Fragment {
         Log.d("HealthPet", "asking for activity permission");
         // Ask for activity recognition permission
         ActivityResultLauncher arl = registerForActivityResult(new ActivityResultContracts.RequestPermission(), callback);
-        arl.launch(Manifest.permission.ACTIVITY_RECOGNITION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            arl.launch(Manifest.permission.ACTIVITY_RECOGNITION);
+        } else {
+            arl.launch("com.google.android.gms.permission.ACTIVITY_RECOGNITION");
+        }
     }
 
     @Override

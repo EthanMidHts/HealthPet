@@ -109,7 +109,7 @@ public class UserViewModel extends ViewModel {
     public void initializeUser(FirebaseUser user, String petName, PetColor petColor) {
         String uid = user.getUid();
         String goalName = "";
-        int goalPoints = 0;
+        int goalPoints = 999;
         int goalCurrentProgress = -1;
         int goalTotalGoal = -1;
         Map<String, Object> data = new HashMap<String, Object>();
