@@ -1,9 +1,16 @@
 package com.ethanchris.android.healthpet.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Movie;
+import android.graphics.Paint;
+import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -13,16 +20,22 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import com.ethanchris.android.healthpet.R;
 import com.ethanchris.android.healthpet.models.PetColor;
 import com.ethanchris.android.healthpet.models.PetHat;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class PetView extends View {
     private Movie mMovie;
-
-    long movieStart;
+    private long movieStart;
+    private boolean mListening = false;
+    private SpeechRecognizer mSpeechRecognizer;
+    private Intent mSpeechRecognizerIntent;
 
     public PetView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -47,7 +60,64 @@ public class PetView extends View {
                 d.getMetrics(mMetrics);
             }
         }
+
+        mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
+        mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        mSpeechRecognizer.setRecognitionListener(mSpeechRecognitionListener);
     }
+
+    private RecognitionListener mSpeechRecognitionListener = new RecognitionListener() {
+        @Override
+        public void onReadyForSpeech(Bundle bundle) {
+            Log.d("HealthPet", "ready to listen for speech");
+            mListening = true;
+        }
+
+        @Override
+        public void onBeginningOfSpeech() {
+            Log.d("HealthPet", "speech has started");
+        }
+
+        @Override
+        public void onRmsChanged(float v) {
+
+        }
+
+        @Override
+        public void onBufferReceived(byte[] bytes) {
+
+        }
+
+        @Override
+        public void onEndOfSpeech() {
+            mListening = false;
+        }
+
+        @Override
+        public void onError(int i) {
+            Log.e("HealthPet", "speech recognizer error " + i);
+        }
+
+        @Override
+        public void onResults(Bundle bundle) {
+            String result = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).get(0);
+            Log.d("HealthPet", "got speech result: " + result);
+            String petReply = PetViewSpeechResponse.getReply(new PetViewSpeechResponse(result).parse());
+            Toast.makeText(getContext(), petReply, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onPartialResults(Bundle bundle) {
+
+        }
+
+        @Override
+        public void onEvent(int i, Bundle bundle) {
+
+        }
+    };
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -65,6 +135,12 @@ public class PetView extends View {
             if (mMovie != null) {
                 mMovie.setTime(gifTime);
                 mMovie.draw(canvas, 0, 0);
+                if (mListening) {
+                    Paint paint = new Paint();
+                    paint.setColor(Color.WHITE);
+                    paint.setStyle(Paint.Style.FILL);
+                    canvas.drawCircle(500, 500, 10.0f, paint);
+                }
                 this.invalidate();
             }
         }
@@ -72,7 +148,10 @@ public class PetView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Toast.makeText(getContext(), "Hello, nice to see you!", Toast.LENGTH_SHORT).show();
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            Log.d("HealthPet", "pet touched");
+            mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+        }
         return true;
     }
 
@@ -117,6 +196,10 @@ public class PetView extends View {
 
     private int getPetAppearanceId(PetColor color, PetHat hat) {
         return getResources().getIdentifier(color.name().toLowerCase() + "_" + hat.name().toLowerCase(), "drawable", "com.ethanchris.android.healthpet");
+    }
+
+    public void setName(String name) {
+
     }
 
     public void setGif(Context context, PetColor color, PetHat hat) {

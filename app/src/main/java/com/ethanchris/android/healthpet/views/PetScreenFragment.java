@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +63,9 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -83,7 +88,6 @@ public class PetScreenFragment extends Fragment {
                 mUserViewModel.getCurrentUser().removeObserver(this);
                 mPetColor = user.getPetColor();
                 mPetHat = user.getPetHat();
-                mPetView = view.findViewById(R.id.petView);
                 mPetView.setGif(getContext(), mPetColor, mPetHat);
             }
         });
@@ -93,18 +97,28 @@ public class PetScreenFragment extends Fragment {
         return (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED);
     }
 
+    private boolean hasRecordAudioPermission() {
+        return (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED);
+    }
+
     private ActivityResultCallback<Boolean> onGetPermissionResult = new ActivityResultCallback<Boolean>() {
         @Override
         public void onActivityResult(Boolean accepted) {
             if (!accepted) {
                 Toast.makeText(getContext(), "Permission needed :(", Toast.LENGTH_LONG).show();
-//                 Go back to home screen
+//              Go back to home screen
                 Intent intent = new Intent(getContext(), HomeScreenActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         }
     };
+
+    private void getRecordAudioPermission(ActivityResultCallback<Boolean> callback) {
+        Log.d("HealthPet", "asking for record audio permission");
+        ActivityResultLauncher arl = registerForActivityResult(new ActivityResultContracts.RequestPermission(), callback);
+        arl.launch(Manifest.permission.RECORD_AUDIO);
+    }
 
     private void getActivityRecognitionPermission(ActivityResultCallback<Boolean> callback) {
         Log.d("HealthPet", "asking for activity permission");
@@ -121,11 +135,6 @@ public class PetScreenFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GOOGLE_PERMISSION_REQUEST_CODE) {
             Log.d("HealthPet", "Got Google Fit permission result code " + resultCode);
-            if (resultCode == Activity.RESULT_OK) {
-
-            } else {
-                Log.d("HealthPet", data.getExtras().toString());
-            }
         }
     }
 
@@ -139,6 +148,8 @@ public class PetScreenFragment extends Fragment {
         loadUserAndPet(view);
         mGoogleFitViewModel = new ViewModelProvider(this, new GoogleFitViewModelFactory())
                 .get(GoogleFitViewModel.class);
+
+        mPetView = view.findViewById(R.id.petView);
 
         mSettingsButton = view.findViewById(R.id.open_settings_button);
         mSettingsButton.setOnClickListener(new View.OnClickListener() {
@@ -156,6 +167,22 @@ public class PetScreenFragment extends Fragment {
         // Check for activity recognition permission
         if (!hasActivityRecognitionPermission()) {
             getActivityRecognitionPermission(onGetPermissionResult);
+        }
+
+        // Check for record audio permission
+        if (!hasRecordAudioPermission()) {
+            getRecordAudioPermission(new ActivityResultCallback<Boolean>() {
+                @Override
+                public void onActivityResult(Boolean success) {
+                    if (!success) {
+                        Toast.makeText(getContext(), "Permission needed :(", Toast.LENGTH_LONG).show();
+                        // Go back to home screen
+                        Intent intent = new Intent(getContext(), HomeScreenActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                }
+            });
         }
 
         // Get Google account

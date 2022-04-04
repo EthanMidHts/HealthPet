@@ -1,8 +1,10 @@
 package com.ethanchris.android.healthpet.views
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ethanchris.android.healthpet.R
 import com.ethanchris.android.healthpet.ui.login.LoginActivity

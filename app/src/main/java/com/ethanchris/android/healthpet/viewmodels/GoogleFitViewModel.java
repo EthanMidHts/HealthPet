@@ -39,4 +39,6 @@ public class GoogleFitViewModel extends ViewModel {
                         .build());
         goalResponse.addOnCompleteListener(callback);
     }
+
+
 }
