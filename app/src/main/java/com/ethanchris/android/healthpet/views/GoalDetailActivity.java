@@ -31,7 +31,7 @@ import com.ethanchris.android.healthpet.viewmodels.UserViewModelFactory;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class GoalDetailActivity extends AppCompatActivity {
-    Button mCreateHabitGoal, mCreateSleepGoal, mClearGoal;
+    Button mCreateHabitGoal, mClearGoal;
     UserViewModel mUserViewModel;
     HabitGoalPopupViewModel mHabitGoalPopupViewModel;
     AlertDialog mDialog;
@@ -47,7 +47,6 @@ public class GoalDetailActivity extends AppCompatActivity {
         mHabitGoalPopupViewModel = new ViewModelProvider(this, new HabitGoalPopupViewModelFactory()).get(HabitGoalPopupViewModel.class);
         mClearGoal = findViewById(R.id.clearCurrentGoalButton);
         mCreateHabitGoal = findViewById(R.id.createHabitGoalButton);
-        mCreateSleepGoal = findViewById(R.id.createSleepGoalButton);
         mGoalProgressBar = findViewById(R.id.goalProgressBar);
 
         mGoalNameTextView = findViewById(R.id.goalNameTextView);
@@ -60,12 +59,10 @@ public class GoalDetailActivity extends AppCompatActivity {
                     mClearGoal.setVisibility(View.INVISIBLE);
                     mGoalProgressBar.setVisibility(View.INVISIBLE);
                     mCreateHabitGoal.setVisibility(View.VISIBLE);
-                    mCreateSleepGoal.setVisibility(View.VISIBLE);
                 } else {
                     mClearGoal.setVisibility(View.VISIBLE);
                     mGoalProgressBar.setVisibility(View.VISIBLE);
                     mCreateHabitGoal.setVisibility(View.INVISIBLE);
-                    mCreateSleepGoal.setVisibility(View.INVISIBLE);
                     mGoalProgressBar.setProgress(((Long)user.getGoalCurrentProgress()).intValue());
                 }
             }
