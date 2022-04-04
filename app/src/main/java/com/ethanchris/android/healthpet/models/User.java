@@ -13,8 +13,8 @@ public class User {
     public static final String FB_GOAL_NAME = "goalName";
     public static final String FB_PET_NAME = "petName";
     public static final String FB_GOAL_POINTS = "goalPoints";
-    public static final String FB_GOAL_CURRENT_PROGRESS = "goalCurrentProgress";
-    public static final String FB_GOAL_TOTAL_GOAL = "goalTotalGoal";
+    public static final String FB_DAYS_LEFT_IN_GOAL = "daysLeftInGoal";
+    public static final String FB_TOTAL_DAYS_IN_GOAL = "totalDaysInGoal";
     public static final String FB_PET_COLOR = "petColor";
     public static final String FB_PET_HAT = "petHat";
 
@@ -23,19 +23,18 @@ public class User {
     private String petName;
     private PetColor petColor;
     private PetHat petHat;
-    private long goalCurrentProgress;
-    private long goalTotalGoal;
+    private long daysLeftInGoal;
+    private long totalDaysInGoal;
 
     private FirebaseUser user;
 
     private User() {}
 
-    public User(FirebaseUser firebaseUser, long goalPoints, String goalName, String petName, long goalCurrentProgress, long goalTotalGoal, PetColor petColor, PetHat petHat) {
+    public User(FirebaseUser firebaseUser, long goalPoints, String goalName, String petName, long daysLeftInGoal, long totalDaysInGoal, PetColor petColor, PetHat petHat) {
         this.user = firebaseUser;
         this.goalName = goalName;
         this.goalPoints = goalPoints;
-        this.goalCurrentProgress = goalCurrentProgress;
-        this.goalTotalGoal = goalTotalGoal;
+        this.daysLeftInGoal = daysLeftInGoal;
         this.petName = petName;
         this.petColor = petColor;
         this.petHat = petHat;
@@ -57,20 +56,16 @@ public class User {
         this.goalName = goalName;
     }
 
-    public long getGoalCurrentProgress() {
-        return goalCurrentProgress;
+    public long getTotalDaysInGoal() { return this.totalDaysInGoal; }
+
+    public void setTotalDaysInGoal(long totalDaysInGoal) { this.totalDaysInGoal = totalDaysInGoal; }
+
+    public long getDaysLeftInGoal() {
+        return this.daysLeftInGoal;
     }
 
-    public void setGoalCurrentProgress(int goalCurrentProgress) {
-        this.goalCurrentProgress = goalCurrentProgress;
-    }
-
-    public long getGoalTotalGoal() {
-        return this.goalTotalGoal;
-    }
-
-    public void setGoalTotalGoal(int goalTotalGoal) {
-        this.goalTotalGoal = goalTotalGoal;
+    public void setDaysLeftInGoal(int daysLeftInGoal) {
+        this.daysLeftInGoal = daysLeftInGoal;
     }
 
     public String getName() {

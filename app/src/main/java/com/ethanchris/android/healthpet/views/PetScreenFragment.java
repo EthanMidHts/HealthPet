@@ -44,8 +44,39 @@ public class PetScreenFragment extends Fragment {
                 mPetColor = user.getPetColor();
                 mPetHat = user.getPetHat();
                 mPetView.setGif(getContext(), mPetColor, mPetHat);
+                mPetView.setName(user.getPetName());
+                mPetView.setSpeechCallback(new PetCallback<PetViewSpeechResponseType>() {
+                    @Override
+                    public void handleCallback(PetViewSpeechResponseType value) {
+                        if (value == PetViewSpeechResponseType.GOAL_ACCOMPLISHED) {
+                            handleGoalAccomplished();
+                        } else if (value == PetViewSpeechResponseType.GOAL_NOT_ACCOMPLISHED) {
+                            handleGoalNotAccomplished();
+                        }
+                    }
+                });
             }
         });
+    }
+
+    private void handleGoalAccomplished() {
+        User user = mUserViewModel.getCurrentUser().getValue();
+        user.setDaysLeftInGoal((int) user.getDaysLeftInGoal() - 1);
+        if (user.getDaysLeftInGoal() == 0) {
+            // User has accomplished their goal, reset it and award them points
+            user.setGoalName("No Goal");
+            user.setTotalDaysInGoal(-1);
+            user.setGoalPoints((int)user.getGoalPoints() + 5);
+            user.setDaysLeftInGoal(-1);
+            Toast.makeText(getContext(), "Congratulations! You completed your goal.", Toast.LENGTH_SHORT).show();
+        }
+        mUserViewModel.saveUser(user);
+    }
+
+    private void handleGoalNotAccomplished() {
+        User user = mUserViewModel.getCurrentUser().getValue();
+        user.setDaysLeftInGoal((int) user.getTotalDaysInGoal());
+        mUserViewModel.saveUser(user);
     }
 
     private boolean hasRecordAudioPermission() {
@@ -57,7 +88,7 @@ public class PetScreenFragment extends Fragment {
         public void onActivityResult(Boolean accepted) {
             if (!accepted) {
                 Toast.makeText(getContext(), "Permission needed :(", Toast.LENGTH_LONG).show();
-//              Go back to home screen
+                // Go back to home screen if permission was denied
                 Intent intent = new Intent(getContext(), HomeScreenActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -78,9 +109,9 @@ public class PetScreenFragment extends Fragment {
 
         mUserViewModel = new ViewModelProvider(this, new UserViewModelFactory())
                 .get(UserViewModel.class);
-        loadUserAndPet(view);
 
         mPetView = view.findViewById(R.id.petView);
+        loadUserAndPet(view);
 
         mSettingsButton = view.findViewById(R.id.open_settings_button);
         mSettingsButton.setOnClickListener(new View.OnClickListener() {

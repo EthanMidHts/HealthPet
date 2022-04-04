@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel;
 
 public class HabitGoalPopupViewModel extends ViewModel {
     MutableLiveData<String> habitName = new MutableLiveData<String>();
-    MutableLiveData<Integer> frequency = new MutableLiveData<Integer>();
     MutableLiveData<Integer> numDays = new MutableLiveData<Integer>();
 
     HabitGoalPopupViewModel() {
@@ -14,10 +13,6 @@ public class HabitGoalPopupViewModel extends ViewModel {
 
     public MutableLiveData<String> getHabitName() {
         return this.habitName;
-    }
-
-    public MutableLiveData<Integer> getFrequency() {
-        return this.frequency;
     }
 
     public MutableLiveData<Integer> getNumDays() {

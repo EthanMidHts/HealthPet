@@ -5,5 +5,6 @@ public enum PetViewSpeechResponseType {
     GOAL_NOT_ACCOMPLISHED,
     HELLO,
     HOW_ARE_YOU,
+    WHATS_YOUR_NAME,
     UNKNOWN
 }

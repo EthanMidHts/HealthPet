@@ -34,8 +34,10 @@ public class PetView extends View {
     private Movie mMovie;
     private long movieStart;
     private boolean mListening = false;
+    private String name = "";
     private SpeechRecognizer mSpeechRecognizer;
     private Intent mSpeechRecognizerIntent;
+    private PetCallback<PetViewSpeechResponseType> mSpeechCallback;
 
     public PetView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -104,7 +106,11 @@ public class PetView extends View {
         public void onResults(Bundle bundle) {
             String result = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).get(0);
             Log.d("HealthPet", "got speech result: " + result);
-            String petReply = PetViewSpeechResponse.getReply(new PetViewSpeechResponse(result).parse());
+            PetViewSpeechResponse response = new PetViewSpeechResponse(result);
+            if (PetView.this.mSpeechCallback != null) {
+                PetView.this.mSpeechCallback.handleCallback(response.parse());
+            }
+            String petReply = PetViewSpeechResponse.getReply(response.parse(), PetView.this.name);
             Toast.makeText(getContext(), petReply, Toast.LENGTH_SHORT).show();
         }
 
@@ -144,6 +150,10 @@ public class PetView extends View {
                 this.invalidate();
             }
         }
+    }
+
+    public void setSpeechCallback(PetCallback<PetViewSpeechResponseType> callback) {
+        this.mSpeechCallback = callback;
     }
 
     @Override
@@ -199,7 +209,7 @@ public class PetView extends View {
     }
 
     public void setName(String name) {
-
+        this.name = name;
     }
 
     public void setGif(Context context, PetColor color, PetHat hat) {

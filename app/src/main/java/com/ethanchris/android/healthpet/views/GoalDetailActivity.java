@@ -63,7 +63,9 @@ public class GoalDetailActivity extends AppCompatActivity {
                     mClearGoal.setVisibility(View.VISIBLE);
                     mGoalProgressBar.setVisibility(View.VISIBLE);
                     mCreateHabitGoal.setVisibility(View.INVISIBLE);
-                    mGoalProgressBar.setProgress(((Long)user.getGoalCurrentProgress()).intValue());
+                    // Calculate progress
+                    int progress = (int)Math.floor(((user.getTotalDaysInGoal() - user.getDaysLeftInGoal()) / ((double) user.getTotalDaysInGoal())) * 100);
+                    mGoalProgressBar.setProgress(progress);
                 }
             }
         });
@@ -102,21 +104,6 @@ public class GoalDetailActivity extends AppCompatActivity {
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                         String newText = charSequence.toString();
                         mHabitGoalPopupViewModel.getHabitName().setValue(newText);
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) { }
-                });
-
-                EditText habitFrequencyEditText = popupView.findViewById(R.id.habitFrequencyEditText);
-                habitFrequencyEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        int newFrequency = Integer.parseInt(charSequence.toString());
-                        mHabitGoalPopupViewModel.getFrequency().setValue(newFrequency);
                     }
 
                     @Override
@@ -174,8 +161,7 @@ public class GoalDetailActivity extends AppCompatActivity {
         User user = mUserViewModel.getCurrentUser().getValue();
         if (user != null) {
             user.setGoalName("No Goal");
-            user.setGoalTotalGoal(-1);
-            user.setGoalCurrentProgress(-1);
+            user.setDaysLeftInGoal(-1);
             mUserViewModel.saveUser(user);
             return true;
         } else {
@@ -187,8 +173,8 @@ public class GoalDetailActivity extends AppCompatActivity {
         User user = mUserViewModel.getCurrentUser().getValue();
         if (user != null) {
             user.setGoalName(mHabitGoalPopupViewModel.getHabitName().getValue());
-            user.setGoalTotalGoal(mHabitGoalPopupViewModel.getNumDays().getValue() * mHabitGoalPopupViewModel.getFrequency().getValue());
-            user.setGoalCurrentProgress(0);
+            user.setDaysLeftInGoal(mHabitGoalPopupViewModel.getNumDays().getValue());
+            user.setTotalDaysInGoal(mHabitGoalPopupViewModel.getNumDays().getValue());
             mUserViewModel.saveUser(user);
             return true;
         } else {

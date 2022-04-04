@@ -56,8 +56,8 @@ public class UserViewModel extends ViewModel {
 
         data.put(User.FB_GOAL_NAME, user.getGoalName());
         data.put(User.FB_GOAL_POINTS, user.getGoalPoints());
-        data.put(User.FB_GOAL_CURRENT_PROGRESS, user.getGoalCurrentProgress());
-        data.put(User.FB_GOAL_TOTAL_GOAL, user.getGoalTotalGoal());
+        data.put(User.FB_DAYS_LEFT_IN_GOAL, user.getDaysLeftInGoal());
+        data.put(User.FB_TOTAL_DAYS_IN_GOAL, user.getTotalDaysInGoal());
         data.put(User.FB_PET_NAME, user.getPetName());
         data.put(User.FB_PET_HAT, user.getPetHat().name());
         data.put(User.FB_PET_COLOR, user.getPetColor().name());
@@ -92,9 +92,9 @@ public class UserViewModel extends ViewModel {
                         PetColor petColor = PetColor.valueOf((String) data.get(User.FB_PET_COLOR));
                         PetHat petHat = PetHat.valueOf((String) data.get(User.FB_PET_HAT));
                         long goalPoints = (Long) data.get(User.FB_GOAL_POINTS);
-                        long goalCurrentProgress = (Long) data.get(User.FB_GOAL_CURRENT_PROGRESS);
-                        long goalTotalGoal = (Long) data.get(User.FB_GOAL_TOTAL_GOAL);
-                        User user = new User(firebaseUser, goalPoints, goalName, petName, goalCurrentProgress, goalTotalGoal, petColor, petHat);
+                        long daysLeftInGoal = (Long) data.get(User.FB_DAYS_LEFT_IN_GOAL);
+                        long totalDaysInGoal = (Long) data.get(User.FB_TOTAL_DAYS_IN_GOAL);
+                        User user = new User(firebaseUser, goalPoints, goalName, petName, daysLeftInGoal, totalDaysInGoal, petColor, petHat);
                         currentUser.setValue(user);
                         UserViewModel.user = user;
                     } else {
@@ -108,16 +108,16 @@ public class UserViewModel extends ViewModel {
 
     public void initializeUser(FirebaseUser user, String petName, PetColor petColor) {
         String uid = user.getUid();
-        String goalName = "";
+        String goalName = "No Goal";
         int goalPoints = 999;
-        int goalCurrentProgress = -1;
-        int goalTotalGoal = -1;
+        int daysLeftInGoal = -1;
+        int totalDaysInGoal = -1;
         Map<String, Object> data = new HashMap<String, Object>();
 
         data.put(User.FB_GOAL_NAME, goalName);
         data.put(User.FB_GOAL_POINTS, goalPoints);
-        data.put(User.FB_GOAL_CURRENT_PROGRESS, goalCurrentProgress);
-        data.put(User.FB_GOAL_TOTAL_GOAL, goalTotalGoal);
+        data.put(User.FB_DAYS_LEFT_IN_GOAL, daysLeftInGoal);
+        data.put(User.FB_TOTAL_DAYS_IN_GOAL, totalDaysInGoal);
         data.put(User.FB_PET_NAME, petName);
         data.put(User.FB_PET_HAT, PetHat.NO_HAT.name());
         data.put(User.FB_PET_COLOR, petColor.name());
