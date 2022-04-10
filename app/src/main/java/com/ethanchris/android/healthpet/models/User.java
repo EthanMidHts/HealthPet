@@ -1,5 +1,7 @@
 package com.ethanchris.android.healthpet.models;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,6 +19,9 @@ public class User {
     public static final String FB_TOTAL_DAYS_IN_GOAL = "totalDaysInGoal";
     public static final String FB_PET_COLOR = "petColor";
     public static final String FB_PET_HAT = "petHat";
+    public static final String FB_COWBOY_HAT = "hasCowboyHat";
+    public static final String FB_BASEBALL_HAT = "hasBaseballHat";
+    public static final String FB_TOP_HAT = "hasTopHat";
 
     private long goalPoints;
     private String goalName;
@@ -25,12 +30,15 @@ public class User {
     private PetHat petHat;
     private long daysLeftInGoal;
     private long totalDaysInGoal;
+    private boolean cowboyHatPurchased;
+    private boolean topHatPurchased;
+    private boolean baseballHatPurchased;
 
     private FirebaseUser user;
 
     private User() {}
 
-    public User(FirebaseUser firebaseUser, long goalPoints, String goalName, String petName, long daysLeftInGoal, long totalDaysInGoal, PetColor petColor, PetHat petHat) {
+    public User(FirebaseUser firebaseUser, long goalPoints, String goalName, String petName, long daysLeftInGoal, long totalDaysInGoal, PetColor petColor, PetHat petHat,boolean topHatPurchased,boolean baseballHatPurchased,boolean cowboyHatPurchased) {
         this.user = firebaseUser;
         this.goalName = goalName;
         this.goalPoints = goalPoints;
@@ -38,6 +46,10 @@ public class User {
         this.petName = petName;
         this.petColor = petColor;
         this.petHat = petHat;
+        this.baseballHatPurchased = baseballHatPurchased;
+        this.cowboyHatPurchased = cowboyHatPurchased;
+        this.topHatPurchased = topHatPurchased;
+        Log.d("USER","before everything");
     }
 
     public long getGoalPoints() {
@@ -77,6 +89,20 @@ public class User {
     public PetColor getPetColor() { return this.petColor; }
 
     public PetHat getPetHat() { return this.petHat; };
+
+    public void setPetHat(PetHat pethat){this.petHat = pethat; }
+
+    public boolean getbaseBallHat() { return this.baseballHatPurchased; };
+
+    public boolean getTopHat() { return this.topHatPurchased; };
+
+    public boolean getCowboyHat() { return this.cowboyHatPurchased; };
+
+    public void setbaseBallHat(boolean status) { this.baseballHatPurchased = status; };
+
+    public void setTopHat(boolean status) { this.topHatPurchased = status; };
+
+    public void setCowboyHat(boolean status) { this.cowboyHatPurchased = status; };
 
     public FirebaseUser getFirebaseUser() { return this.user; }
 }

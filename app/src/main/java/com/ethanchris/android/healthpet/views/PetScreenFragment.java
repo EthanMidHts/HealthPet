@@ -29,7 +29,7 @@ import com.ethanchris.android.healthpet.viewmodels.UserViewModelFactory;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class PetScreenFragment extends Fragment {
-    private Button mSettingsButton, mGoalsButton;
+    private Button mSettingsButton, mGoalsButton, mShopButton;
     private PetView mPetView;
     private UserViewModel mUserViewModel;
     private PetColor mPetColor;
@@ -103,6 +103,13 @@ public class PetScreenFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mPetView = getView().findViewById(R.id.petView);
+        loadUserAndPet(mPetView);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.pet_screen_fragment_fullscreen, container, false);
@@ -126,6 +133,14 @@ public class PetScreenFragment extends Fragment {
             public void onClick(View buttonView) { openGoalsActivity(view.getContext()); }
         });
 
+        mShopButton = view.findViewById(R.id.open_shop_button);
+        mShopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View buttonView) {
+                openShopActivity(view.getContext());
+            }
+        });
+
         // Check for record audio permission and obtain it if needed
         if (!hasRecordAudioPermission()) {
             getRecordAudioPermission(onGetPermissionResult);
@@ -146,6 +161,11 @@ public class PetScreenFragment extends Fragment {
 
     private void openGoalsActivity(Context context) {
         Intent intent = new Intent(context, GoalDetailActivity.class);
+        startActivity(intent);
+    }
+
+    private void openShopActivity(Context context) {
+        Intent intent = new Intent(context, ShopActivity.class);
         startActivity(intent);
     }
 }

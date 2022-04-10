@@ -61,6 +61,9 @@ public class UserViewModel extends ViewModel {
         data.put(User.FB_PET_NAME, user.getPetName());
         data.put(User.FB_PET_HAT, user.getPetHat().name());
         data.put(User.FB_PET_COLOR, user.getPetColor().name());
+        data.put(User.FB_TOP_HAT, user.getTopHat());
+        data.put(User.FB_COWBOY_HAT, user.getCowboyHat());
+        data.put(User.FB_BASEBALL_HAT, user.getbaseBallHat());
 
         db.collection("users").document(user.getFirebaseUser().getUid()).set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -94,7 +97,10 @@ public class UserViewModel extends ViewModel {
                         long goalPoints = (Long) data.get(User.FB_GOAL_POINTS);
                         long daysLeftInGoal = (Long) data.get(User.FB_DAYS_LEFT_IN_GOAL);
                         long totalDaysInGoal = (Long) data.get(User.FB_TOTAL_DAYS_IN_GOAL);
-                        User user = new User(firebaseUser, goalPoints, goalName, petName, daysLeftInGoal, totalDaysInGoal, petColor, petHat);
+                        boolean topHatPurchased = (Boolean)data.get(User.FB_TOP_HAT);
+                        boolean baseballHatPurchased = (Boolean)data.get(User.FB_BASEBALL_HAT);
+                        boolean cowboyHatPurchased = (Boolean)data.get(User.FB_COWBOY_HAT);
+                        User user = new User(firebaseUser, goalPoints, goalName, petName, daysLeftInGoal, totalDaysInGoal, petColor, petHat,topHatPurchased,baseballHatPurchased,cowboyHatPurchased);
                         currentUser.setValue(user);
                         UserViewModel.user = user;
                     } else {
@@ -121,6 +127,9 @@ public class UserViewModel extends ViewModel {
         data.put(User.FB_PET_NAME, petName);
         data.put(User.FB_PET_HAT, PetHat.NO_HAT.name());
         data.put(User.FB_PET_COLOR, petColor.name());
+        data.put(User.FB_BASEBALL_HAT, false);
+        data.put(User.FB_COWBOY_HAT, false);
+        data.put(User.FB_TOP_HAT,false);
 
         db.collection("users").document(uid).set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
