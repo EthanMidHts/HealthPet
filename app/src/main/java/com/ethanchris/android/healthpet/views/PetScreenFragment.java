@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -29,7 +30,7 @@ import com.ethanchris.android.healthpet.viewmodels.UserViewModelFactory;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class PetScreenFragment extends Fragment {
-    private Button mSettingsButton, mGoalsButton, mShopButton;
+    private ImageButton mSettingsButton, mGoalsButton, mShopButton;
     private PetView mPetView;
     private UserViewModel mUserViewModel;
     private PetColor mPetColor;

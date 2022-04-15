@@ -1,17 +1,15 @@
 package com.ethanchris.android.healthpet.views
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Window
-import android.view.WindowManager
-import androidx.fragment.app.FragmentManager
+import androidx.appcompat.app.AppCompatActivity
 import com.ethanchris.android.healthpet.R
 
 class PetScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pet_screen)
+
 
         val fm = supportFragmentManager;
         var fragment = fm.findFragmentById(R.id.pet_screen_fragment_container)

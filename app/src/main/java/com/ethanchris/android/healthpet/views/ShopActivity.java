@@ -1,6 +1,7 @@
 package com.ethanchris.android.healthpet.views;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import com.ethanchris.android.healthpet.databinding.ActivityShopBinding;
@@ -11,9 +12,12 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -37,6 +41,7 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
+
         ImageButton noHatButton = findViewById(R.id.nohatbutton);
         ImageButton topHatButton = findViewById(R.id.tophatbutton);
         ImageButton baseballHatButton = findViewById(R.id.baseballbutton);
@@ -47,7 +52,11 @@ public class ShopActivity extends AppCompatActivity {
         User user = mUserViewModel.getCurrentUser().getValue();
 
         TextView pointsTextView = (TextView)findViewById(R.id.pointsText);
-        pointsTextView.setText(Long.toString(user.getGoalPoints()));
+        Typeface typeface = ResourcesCompat.getFont(
+                this,
+                R.font.backto1984);
+        pointsTextView.setTypeface(typeface);
+        pointsTextView.setText("Points:" + Long.toString(user.getGoalPoints()));
 
         Context context = getApplicationContext();
         CharSequence toastText = "Hat set!";
@@ -78,7 +87,7 @@ public class ShopActivity extends AppCompatActivity {
                     user.setTopHat(true);
                     mUserViewModel.saveUser(user);
                     Toast toast = Toast.makeText(context, toastText, toastDuration);
-                    pointsTextView.setText(Long.toString(user.getGoalPoints()));
+                    pointsTextView.setText("Points:" + Long.toString(user.getGoalPoints()));
                 } else {
                     CharSequence toastText = "Insufficient points.";
                     Toast toast = Toast.makeText(context, toastText, toastDuration);
@@ -100,7 +109,7 @@ public class ShopActivity extends AppCompatActivity {
                     user.setbaseBallHat(true);
                     mUserViewModel.saveUser(user);
                     Toast toast = Toast.makeText(context, toastText, toastDuration);
-                    pointsTextView.setText(Long.toString(user.getGoalPoints()));
+                    pointsTextView.setText("Points:" + Long.toString(user.getGoalPoints()));
                 } else {
                     CharSequence toastText = "Insufficient points.";
                     Toast toast = Toast.makeText(context, toastText, toastDuration);
@@ -122,7 +131,7 @@ public class ShopActivity extends AppCompatActivity {
                     user.setCowboyHat(true);
                     mUserViewModel.saveUser(user);
                     Toast toast = Toast.makeText(context, toastText, toastDuration);
-                    pointsTextView.setText(Long.toString(user.getGoalPoints()));
+                    pointsTextView.setText("Points:" + Long.toString(user.getGoalPoints()));
                 } else {
                     CharSequence toastText = "Insufficient points.";
                     Toast toast = Toast.makeText(context, toastText, toastDuration);

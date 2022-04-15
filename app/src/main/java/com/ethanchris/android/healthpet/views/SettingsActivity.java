@@ -27,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+
         mUserViewModel = new ViewModelProvider(this, new UserViewModelFactory())
                 .get(UserViewModel.class);
          mAuthViewModel = new ViewModelProvider(this, new AuthViewModelFactory(mUserViewModel))
