@@ -44,13 +44,22 @@ public class GoalDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_goal_detail);
         mUserViewModel = new ViewModelProvider(this, new UserViewModelFactory())
                 .get(UserViewModel.class);
+        if (mUserViewModel.getCurrentUser().getValue() == null) {
+            mUserViewModel.getFromFirebaseUser(FirebaseAuth.getInstance().getCurrentUser());
+            mUserViewModel.getCurrentUser().observe(this, new Observer<User>() {
+                @Override
+                public void onChanged(User user) {
+
+                }
+            });
+        }
+
         mHabitGoalPopupViewModel = new ViewModelProvider(this, new HabitGoalPopupViewModelFactory()).get(HabitGoalPopupViewModel.class);
         mClearGoal = findViewById(R.id.clearCurrentGoalButton);
         mCreateHabitGoal = findViewById(R.id.createHabitGoalButton);
         mGoalProgressBar = findViewById(R.id.goalProgressBar);
 
         mGoalNameTextView = findViewById(R.id.goalNameTextView);
-        mGoalNameTextView.setText(mUserViewModel.getCurrentUser().getValue().getGoalName());
         mUserViewModel.getCurrentUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {

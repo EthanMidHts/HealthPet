@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Movie;
 import android.graphics.Paint;
+import android.graphics.drawable.AnimatedImageDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -45,13 +47,13 @@ public class PetView extends View {
         if (attrs != null) {
             TypedArray mAttrs = context.getTheme().obtainStyledAttributes(attrs, R.styleable.PetView, 0, 0);
             if (R.styleable.PetView_state != 0) {
-                InputStream stream = context.getResources().openRawResource(+ mAttrs.getResourceId(R.styleable.PetView_state, R.drawable.purple_no_hat));
+                InputStream stream = context.getResources().openRawResource(+ mAttrs.getResourceId(R.styleable.PetView_state, getPetAppearanceId(PetColor.PURPLE, PetHat.NO_HAT)));
                 if (stream != null) {
                     mMovie = Movie.decodeStream(stream);
                 }
             }
         } else {
-            InputStream stream = context.getResources().openRawResource(+ R.drawable.purple_no_hat);
+            InputStream stream = context.getResources().openRawResource(+ getPetAppearanceId(PetColor.PURPLE, PetHat.NO_HAT));
             mMovie = Movie.decodeStream(stream);
         }
         final WindowManager w = (WindowManager) context
@@ -128,6 +130,7 @@ public class PetView extends View {
     @Override
     public void onDraw(Canvas canvas) {
         if (canvas != null) {
+            canvas.scale(16.0f, 16.0f);
             super.onDraw(canvas);
             long now = android.os.SystemClock.uptimeMillis();
             if (movieStart == 0) { movieStart = now; }
@@ -140,7 +143,9 @@ public class PetView extends View {
             }
             if (mMovie != null) {
                 mMovie.setTime(gifTime);
-                mMovie.draw(canvas, 0, 0);
+                Paint moviePaint = new Paint();
+                moviePaint.setFilterBitmap(false);
+                mMovie.draw(canvas, 0, 0, moviePaint);
                 if (mListening) {
                     Paint paint = new Paint();
                     paint.setColor(Color.WHITE);
@@ -205,7 +210,7 @@ public class PetView extends View {
     }
 
     private int getPetAppearanceId(PetColor color, PetHat hat) {
-        return getResources().getIdentifier(color.name().toLowerCase() + "_" + hat.name().toLowerCase(), "drawable", "com.ethanchris.android.healthpet");
+        return getResources().getIdentifier(color.name().toLowerCase() + "_" + hat.name().toLowerCase() + "_sm", "drawable", "com.ethanchris.android.healthpet");
     }
 
     public void setName(String name) {
@@ -214,6 +219,7 @@ public class PetView extends View {
 
     public void setGif(Context context, PetColor color, PetHat hat) {
         InputStream stream = context.getResources().openRawResource(+ getPetAppearanceId(color, hat));
+
         mMovie = Movie.decodeStream(stream);
         movieStart = 0;
         this.invalidate();

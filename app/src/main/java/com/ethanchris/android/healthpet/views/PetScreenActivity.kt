@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Window
 import android.view.WindowManager
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.ethanchris.android.healthpet.R
 
@@ -18,7 +19,7 @@ class PetScreenActivity : AppCompatActivity() {
         // Make sure fragment isn't already created
         if (fragment == null) {
             fragment = PetScreenFragment()
-            fm.beginTransaction().add(R.id.pet_screen_fragment_container, fragment).commit()
+            fm.beginTransaction().add(R.id.pet_screen_fragment_container, fragment).commitNow()
         }
 
         Log.i("ActivityLifecycle", "PetScreenActivity onCreate()")

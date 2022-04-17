@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.login;
+        final Button loginButton = binding.loginButton;
         final ProgressBar loadingProgressBar = binding.loading;
 
         Intent petIntent = new Intent(this, PetScreenActivity.class);

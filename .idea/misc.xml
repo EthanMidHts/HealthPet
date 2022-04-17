@@ -29,7 +29,7 @@
         <entry key="app/src/main/res/layout/activity_pet_screen.xml" value="0.10833333333333334" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.19610507246376813" />
-        <entry key="app/src/main/res/layout/pet_screen_fragment_fullscreen.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/pet_screen_fragment_fullscreen.xml" value="0.5" />
         <entry key="app/src/main/res/layout/popup_create_habit_goal.xml" value="0.24682971014492755" />
       </map>
     </option>
