@@ -46,7 +46,9 @@ class RegisterActivityTest : TestCase(){
         email.append("-testcase@gmail.com")
 
         onView(withId(R.id.emailEditText)).perform(ViewActions.typeText(email.toString()));
+        closeSoftKeyboard()
         onView(withId(R.id.passwordEditText)).perform(ViewActions.typeText("testcase"))
+        closeSoftKeyboard()
         onView(withId(R.id.purpleRadioButton)).perform(ViewActions.click())
         closeSoftKeyboard()
         onView(withId(R.id.petNameEditText)).perform(ViewActions.typeText("testcase pet name"))

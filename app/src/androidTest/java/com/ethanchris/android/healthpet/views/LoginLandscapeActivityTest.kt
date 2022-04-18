@@ -58,6 +58,5 @@ class LoginLandscapeActivityTest : TestCase(){
         onView(withId(R.id.password)).perform(ViewActions.typeText("testcase"))
         closeSoftKeyboard()
         onView(withId(R.id.loginButton)).perform(ViewActions.click())
-        FirebaseAuth.getInstance().signOut()
     }
 }
