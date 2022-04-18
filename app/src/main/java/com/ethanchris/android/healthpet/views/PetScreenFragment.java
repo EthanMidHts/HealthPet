@@ -118,6 +118,10 @@ public class PetScreenFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.pet_screen_fragment_fullscreen, container, false);
 
+        mUserViewModel = new ViewModelProvider(this, new UserViewModelFactory())
+                .get(UserViewModel.class);
+        mUserViewModel.getFromFirebaseUser(FirebaseAuth.getInstance().getCurrentUser());
+
         mPetView = view.findViewById(R.id.petView);
         loadUserAndPet(view);
 
@@ -155,9 +159,6 @@ public class PetScreenFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserViewModel = new ViewModelProvider(this, new UserViewModelFactory())
-                .get(UserViewModel.class);
-        mUserViewModel.getFromFirebaseUser(FirebaseAuth.getInstance().getCurrentUser());
     }
 
     private void openSettingsActivity(Context context) {

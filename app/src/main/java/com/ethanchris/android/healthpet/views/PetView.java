@@ -152,11 +152,6 @@ public class PetView extends View {
                     paint.setStyle(Paint.Style.FILL);
                     canvas.drawCircle(500, 500, 10.0f, paint);
                 }
-                try {
-                    Thread.sleep(500);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 this.invalidate();
             }
         }
@@ -178,13 +173,8 @@ public class PetView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int desiredWidth, desiredHeight;
-        if (mMovie != null) {
-            desiredWidth = mMovie.width();
-            desiredHeight = mMovie.height();
-        } else {
-            desiredWidth = 1024;
-            desiredHeight = 1024;
-        }
+        desiredWidth = 1024;
+        desiredHeight = 1024;
 
         Log.d("HealthPet", "width: " + desiredWidth + ", height: " + desiredHeight);
 
