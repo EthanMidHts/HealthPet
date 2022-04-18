@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -17,6 +18,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -29,14 +31,15 @@ import com.ethanchris.android.healthpet.viewmodels.UserViewModelFactory;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class PetScreenFragment extends Fragment {
-    private Button mSettingsButton, mGoalsButton, mShopButton;
+    private ImageButton mSettingsButton, mGoalsButton, mShopButton;
     private PetView mPetView;
     private UserViewModel mUserViewModel;
     private PetColor mPetColor;
     private PetHat mPetHat;
 
+    private MutableLiveData<Boolean> readyToDisplay = new MutableLiveData<Boolean>();
+
     private void loadUserAndPet(View view) {
-        mUserViewModel.getFromFirebaseUser(FirebaseAuth.getInstance().getCurrentUser());
         mUserViewModel.getCurrentUser().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
@@ -55,6 +58,7 @@ public class PetScreenFragment extends Fragment {
                         }
                     }
                 });
+                readyToDisplay.setValue(true);
             }
         });
     }
@@ -114,9 +118,6 @@ public class PetScreenFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.pet_screen_fragment_fullscreen, container, false);
 
-        mUserViewModel = new ViewModelProvider(this, new UserViewModelFactory())
-                .get(UserViewModel.class);
-
         mPetView = view.findViewById(R.id.petView);
         loadUserAndPet(view);
 
@@ -130,7 +131,9 @@ public class PetScreenFragment extends Fragment {
         mGoalsButton = view.findViewById(R.id.open_goals_button);
         mGoalsButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View buttonView) { openGoalsActivity(view.getContext()); }
+            public void onClick(View buttonView) {
+                openGoalsActivity(view.getContext());
+            }
         });
 
         mShopButton = view.findViewById(R.id.open_shop_button);
@@ -152,6 +155,9 @@ public class PetScreenFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mUserViewModel = new ViewModelProvider(this, new UserViewModelFactory())
+                .get(UserViewModel.class);
+        mUserViewModel.getFromFirebaseUser(FirebaseAuth.getInstance().getCurrentUser());
     }
 
     private void openSettingsActivity(Context context) {

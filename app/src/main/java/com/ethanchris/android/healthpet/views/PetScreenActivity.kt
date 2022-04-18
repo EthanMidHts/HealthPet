@@ -1,8 +1,8 @@
 package com.ethanchris.android.healthpet.views
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.FragmentActivity

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -29,9 +31,10 @@ import com.ethanchris.android.healthpet.viewmodels.HabitGoalPopupViewModelFactor
 import com.ethanchris.android.healthpet.viewmodels.UserViewModel;
 import com.ethanchris.android.healthpet.viewmodels.UserViewModelFactory;
 import com.google.firebase.auth.FirebaseAuth;
+import android.graphics.Typeface;
 
 public class GoalDetailActivity extends AppCompatActivity {
-    Button mCreateHabitGoal, mClearGoal;
+    ImageButton mCreateHabitGoal, mClearGoal;
     UserViewModel mUserViewModel;
     HabitGoalPopupViewModel mHabitGoalPopupViewModel;
     AlertDialog mDialog;
@@ -42,6 +45,7 @@ public class GoalDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goal_detail);
+
         mUserViewModel = new ViewModelProvider(this, new UserViewModelFactory())
                 .get(UserViewModel.class);
         if (mUserViewModel.getCurrentUser().getValue() == null) {
@@ -60,6 +64,11 @@ public class GoalDetailActivity extends AppCompatActivity {
         mGoalProgressBar = findViewById(R.id.goalProgressBar);
 
         mGoalNameTextView = findViewById(R.id.goalNameTextView);
+        mGoalNameTextView.setText(mUserViewModel.getCurrentUser().getValue().getGoalName());
+        Typeface typeface = ResourcesCompat.getFont(
+                this,
+                R.font.backto1984);
+        mGoalNameTextView.setTypeface(typeface);
         mUserViewModel.getCurrentUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {

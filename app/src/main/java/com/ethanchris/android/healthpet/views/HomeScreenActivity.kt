@@ -3,14 +3,16 @@ package com.ethanchris.android.healthpet.views
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ethanchris.android.healthpet.R
 import com.ethanchris.android.healthpet.ui.login.LoginActivity
 import com.ethanchris.android.healthpet.ui.login.RegisterActivity
 
 class HomeScreenActivity : AppCompatActivity() {
-    private var mLoginButton: Button? = null
-    private var mRegisterButton: Button? = null
+    private var mLoginButton: ImageButton? = null
+    private var mRegisterButton: ImageButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

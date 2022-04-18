@@ -152,6 +152,11 @@ public class PetView extends View {
                     paint.setStyle(Paint.Style.FILL);
                     canvas.drawCircle(500, 500, 10.0f, paint);
                 }
+                try {
+                    Thread.sleep(500);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 this.invalidate();
             }
         }
