@@ -50,5 +50,20 @@
         app:layout_constraintVertical_bias="0.966"
         app:srcCompat="@drawable/login_updated" />
 
+    <ImageButton
+        android:id="@+id/aboutButton"
+        android:layout_width="42dp"
+        android:layout_height="58dp"
+        android:layout_marginBottom="36dp"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerButton"
+        app:layout_constraintVertical_bias="0.756"
+        app:srcCompat="@drawable/question_mark_button" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,7 @@ import com.ethanchris.android.healthpet.ui.login.RegisterActivity
 class HomeScreenActivity : AppCompatActivity() {
     private var mLoginButton: ImageButton? = null
     private var mRegisterButton: ImageButton? = null
+    private var mAboutButton: ImageButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +29,12 @@ class HomeScreenActivity : AppCompatActivity() {
         mRegisterButton = findViewById(R.id.registerButton)
         mRegisterButton?.setOnClickListener {
             startActivity(registerIntent);
+        }
+
+        val aboutIntent = Intent(this, AboutActivity::class.java)
+        mAboutButton = findViewById(R.id.aboutButton)
+        mAboutButton?.setOnClickListener {
+            startActivity(aboutIntent);
         }
     }
 }
